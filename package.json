@@ -1,0 +1,13 @@
+{ "name": "connect-dojo"
+, "version": "0.0.1"
+, "description": "Connect plugin exposing the Dojo Toolkit"
+, "author": "David Worms <david@adaltas.com>"
+, "contributors":
+  [ { "name": "David Worms", "email": "david@adaltas.com" } ]
+, "engines": { "node": ">= 0.1.90" }
+, "keywords": ["connect", "express", "dojo"]
+, "repository": 
+  { "type" : "git"
+  , "url" : "https://github.com/wdavidw/node-connect-dojo.git"
+  }
+}
