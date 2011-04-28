@@ -1,4 +1,4 @@
-var express = require('express'),
+var connect = require('connect'),
 	path = require('path'),
 	exec = require('child_process').exec;
 
@@ -30,10 +30,10 @@ module.exports = function(config){
 			var app = app[1];
 			req.url = req.url.substr(app.length+1);
 			// Less
-			express.compiler({ src: destinationRelease+'/'+app, enable: ['less'] })(req,res,function(err){
+			connect.compiler({ src: destinationRelease+'/'+app, enable: ['less'] })(req,res,function(err){
 				if(err){ console.log(err); }
 				// Static
-				express.static(destinationRelease+'/'+app)(req,res,function(){
+				connect.static(destinationRelease+'/'+app)(req,res,function(){
 					req.url = '/'+app+req.url;
 					next();
 				});
