@@ -1,6 +1,6 @@
 { "name": "connect-dojo"
 , "version": "0.0.1"
-, "description": "Connect plugin exposing the Dojo Toolkit"
+, "description": "Connect middleware exposing the Dojo Toolkit"
 , "author": "David Worms <david@adaltas.com>"
 , "contributors":
   [ { "name": "David Worms", "email": "david@adaltas.com" } ]
