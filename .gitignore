@@ -1,4 +1,6 @@
 .*
 !.gitignore
 /node_modules
-/releases/*
+/repository/*
+/sample/git_head/*
+/sample/git_revision/*
