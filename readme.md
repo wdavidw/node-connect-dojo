@@ -53,7 +53,7 @@ and named as "git-${project}-#{revision}".
 General note
 ------------
 
-Note, to prevent multiple application from conflicting, a new directory is created 
+To prevent multiple application from conflicting, a new directory is created 
 for each released version and git revision. This can lead to a large number of directories 
 as new revisions are setup over time. By default, source code is stored inside the 
 connect-dojo module and it is recommended to define your own directory through 
