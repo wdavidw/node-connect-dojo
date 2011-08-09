@@ -51,7 +51,6 @@ module.exports = (options) ->
                     cmds.push 'cd ' + options.repository + '/' + dirname
                     cmds.push 'git checkout ' + revision
                     cmds = cmds.join ' && '
-                    console.log cmds
                     exec cmds, (err, stdout, stderr) ->
                         next(err)
                 clone (err) ->
