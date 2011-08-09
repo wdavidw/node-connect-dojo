@@ -44,7 +44,6 @@ module.exports = (options) ->
                         cmds.push 'cd ' + options.repository
                         cmds.push 'git clone ' + url + ' ' + dirname
                         cmds = cmds.join ' && '
-                        console.log cmds
                         exec cmds, (err, stdout, stderr) ->
                             next(err)
                 checkout = (next) ->
