@@ -36,8 +36,11 @@ module.exports = (options) ->
             submodules.forEach (submodule) ->
                 revision =  options[ submodule + '_revision' ] or 'HEAD'
                 dirname = 'git-' + submodule + '-' + revision
+                mapping[submodule] = options.repository + '/' + dirname
                 clone = (next) ->
                     path.exists options.repository + '/' + dirname, (exists) ->
+                        # Unrequired checkout if the directory named after the revision exists
+                        return _finish() if exists and revision isnt 'HEAD'
                         return next() if exists
                         url = 'https://github.com/dojo/' + submodule + '.git'
                         cmds = []
@@ -57,7 +60,6 @@ module.exports = (options) ->
                     return finish err if err
                     checkout (err) ->
                         return finish err if err
-                        mapping[submodule] = options.repository + '/' + dirname
                         _finish()
         else
             throw new Error 'Invalid method option "' + options.method + '" (expects "download")'
@@ -76,7 +78,7 @@ module.exports = (options) ->
             connect.compiler({ src: mapping[app], enable: ['less'] })(req, res, (err) ->
                 console.log err if err
                 # Static
-                static = connect.static mapping[app] 
+                static = connect.static mapping[app]
                 static req, res, ->
                     req.url = '/' + app + req.url
                     next()
