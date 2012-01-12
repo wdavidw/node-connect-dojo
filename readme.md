@@ -24,7 +24,7 @@ Options
 
 -   *method*, support 'release' (default) and 'git'
 -   *repository*, Default parent directory where source codes are downloaded
--   *version*, Dojo version, currently `'1.6.1rc1'`, apply only to the 'download' method
+-   *version*, Dojo version, currently `'1.7.1'`, apply only to the 'download' method
 
 Using a released version of Dojo
 --------------------------------
@@ -33,7 +33,7 @@ Source code is downloaded from the official Dojo website and all the versions
 present on the website are available. For example to download the version '1.5.0', setup 
 the middleware as:
 
-    dojo({ version: '1.5.0' })
+    dojo({ version: '1.7.1' })
 
 Using the git HEAD
 ------------------

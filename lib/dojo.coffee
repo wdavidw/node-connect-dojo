@@ -6,7 +6,7 @@ module.exports = (options) ->
     # Merge user options with default options
     options ?= {}
     options.method ?= 'release'
-    options.version ?= '1.6.1rc1'
+    options.version ?= '1.7.1'
     options.repository ?= '/tmp'
     # Store HTTP request in case we need to download Dojo
     loading = true
