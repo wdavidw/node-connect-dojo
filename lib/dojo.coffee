@@ -78,8 +78,8 @@ module.exports = (options) ->
             connect.compiler({ src: mapping[app], enable: ['less'] })(req, res, (err) ->
                 console.log err if err
                 # Static
-                static = connect.static mapping[app]
-                static req, res, ->
+                sttc = connect.static mapping[app]
+                sttc req, res, ->
                     req.url = '/' + app + req.url
                     next()
             )
