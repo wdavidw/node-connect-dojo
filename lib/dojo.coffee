@@ -74,6 +74,7 @@ module.exports = (options) ->
         if app and submodules.indexOf( app[1] ) isnt -1
             app = app[1];
             req.url = req.url.substr app.length + 1
+            ### prior express 1.7
             # Less
             connect.compiler({ src: mapping[app], enable: ['less'] })(req, res, (err) ->
                 console.log err if err
@@ -83,6 +84,12 @@ module.exports = (options) ->
                     req.url = '/' + app + req.url
                     next()
             )
+            ###
+            # Static
+            sttc = connect.static mapping[app]
+            sttc req, res, ->
+                req.url = '/' + app + req.url
+                next()
         else
             next()
     plugin
