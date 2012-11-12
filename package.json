@@ -8,7 +8,13 @@
   ],
   "engines": { "node": ">= 0.1.90" },
   "dependencies" : {
-    "coffee-script" : "latest"
+    "coffee-script" : "latest",
+    "connect" : "latest"
+  },
+  "devDependencies" : {
+    "mocha" : "latest",
+    "should" : "latest",
+    "each" : "latest"
   },
   "keywords": ["connect", "express", "dojo"],
   "repository": {
