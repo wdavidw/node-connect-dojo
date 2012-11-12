@@ -8,10 +8,10 @@
   ],
   "engines": { "node": ">= 0.1.90" },
   "dependencies" : {
-    "coffee-script" : "latest",
     "connect" : "latest"
   },
   "devDependencies" : {
+    "coffee-script" : "latest",
     "mocha" : "latest",
     "should" : "latest",
     "each" : "latest"
