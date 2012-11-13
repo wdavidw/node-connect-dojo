@@ -1,8 +1,8 @@
 
-dojo = require '..'
 fs = require 'fs'
 should = require 'should'
 each = require 'each'
+dojo = if process.env.DOJO_COV then require '../lib-cov/dojo' else require '../lib/dojo'
 
 describe 'Release', ->
     it 'should download specific release', (next) ->

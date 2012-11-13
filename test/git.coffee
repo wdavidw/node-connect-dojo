@@ -1,8 +1,8 @@
 
-dojo = require '..'
 fs = require 'fs'
 each = require 'each'
 should = require 'should'
+dojo = if process.env.DOJO_COV then require '../lib-cov/dojo' else require '../lib/dojo'
 
 describe 'Git', ->
     it 'should download dojo HEAD', (next) ->
