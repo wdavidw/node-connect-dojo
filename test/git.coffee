@@ -18,7 +18,7 @@ describe 'Git', ->
                 '/tmp/git-dojox-HEAD'
                 '/tmp/git-util-HEAD'
             ])
-            .on 'item', (next, path) ->
+            .on 'item', (path, next) ->
                 fs.stat path, (err, stats) ->
                     should.not.exist err
                     stats.isDirectory().should.be.ok
@@ -42,7 +42,7 @@ describe 'Git', ->
                 '/tmp/git-dojox-145d3bec095382c2f4ac'
                 '/tmp/git-util-f9cbb550e2959024df57'
             ])
-            .on 'item', (next, path) ->
+            .on 'item', (path, next) ->
                 fs.stat path, (err, stats) ->
                     should.not.exist err
                     stats.isDirectory().should.be.ok

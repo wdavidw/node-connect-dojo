@@ -17,7 +17,7 @@ describe 'Release', ->
                 '/tmp/dojo-release-1.5.0/dijit'
                 '/tmp/dojo-release-1.5.0/dojox'
             ])
-            .on 'item', (next, path) ->
+            .on 'item', (path, next) ->
                 fs.stat path, (err, stats) ->
                     should.not.exist err
                     stats.isDirectory().should.be.ok
