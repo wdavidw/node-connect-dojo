@@ -1,6 +1,7 @@
-connect = require('connect')
-path = require('path')
-exec = require('child_process').exec
+connect = require 'connect'
+fs = require 'fs'
+fs.exists ?= require('path').exists
+{exec} = require 'child_process'
 
 module.exports = (options) ->
     # Merge user options with default options
@@ -21,7 +22,7 @@ module.exports = (options) ->
                 dijit: dir + '/dijit'
                 dojox: dir + '/dojox'
                 util: dir + '/util'
-            path.exists dir, (exists) ->
+            fs.exists dir, (exists) ->
                 return finish() if exists
                 url = 'http://download.dojotoolkit.org/release-' + options.version + '/dojo-release-' + options.version + '.tar.gz'
                 tgz = options.repository + '/dojo-release-' + options.version + '.tar.gz'
@@ -38,7 +39,7 @@ module.exports = (options) ->
                 dirname = 'git-' + submodule + '-' + revision
                 mapping[submodule] = options.repository + '/' + dirname
                 clone = (next) ->
-                    path.exists options.repository + '/' + dirname, (exists) ->
+                    fs.exists options.repository + '/' + dirname, (exists) ->
                         # Unrequired checkout if the directory named after the revision exists
                         return _finish() if exists and revision isnt 'HEAD'
                         return next() if exists
