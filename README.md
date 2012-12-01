@@ -5,19 +5,21 @@ This Connect middleware transparently download and display Dojo files.
 
 In its simplest form, it takes no argument and the latest stable release is used. Here is a quick example:
 
-    var express = require('express');
-    var dojo = require('connect-dojo');
-    var app = express.createServer();
-    app.configure(
-        app.use(express.bodyParser());
-        app.use(express.methodOverride());
-        app.use(express.cookieParser());
-        app.use(dojo());
-        app.use(app.router);
-        app.use(express.static(__dirname + '/public'));
-        app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-    );
-    app.listen(3000);
+```javascript
+var express = require('express');
+var dojo = require('connect-dojo');
+var app = express.createServer();
+app.configure(
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(dojo());
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+);
+app.listen(3000);
+```
 
 Options
 -------
@@ -33,7 +35,9 @@ Source code is downloaded from the official Dojo website and all the versions
 present on the website are available. For example to download the version '1.5.0', setup 
 the middleware as:
 
-    dojo({ version: '1.7.1' })
+```javascript
+dojo({ version: '1.7.1' })
+```
 
 Using the git HEAD
 ------------------
@@ -65,4 +69,6 @@ Testing
 Running the tests can take a long time because of the size of dojo. Using 
 expresso, run the following command by adjusting the '-t' (timeout) argument:
 
-    expresso -s -t 10000 test
+```bash
+expresso -s -t 10000 test
+```
