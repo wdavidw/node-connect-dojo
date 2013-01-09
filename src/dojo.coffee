@@ -3,9 +3,25 @@ fs = require 'fs'
 fs.exists ?= require('path').exists
 {exec} = require 'child_process'
 
-module.exports = (options) ->
+###
+`dojo([options])`
+-----------------
+
+Connect middleware exposing the Dojo Toolkit.
+
+By default, Dojo releases are downloaded and extracted 
+inside the "/tmp" folder and are cached for later usages. 
+You may change this folder into a permanent location by 
+providing the option "repository".
+
+Options include: 
+*   method        One of "release" or "git"
+*   version       Dojo version
+*   repository    Caching folder, default to "/tmp"
+
+###
+module.exports = (options = {}) ->
   # Merge user options with default options
-  options ?= {}
   options.method ?= 'release'
   options.version ?= '1.8.3'
   options.repository ?= '/tmp'
