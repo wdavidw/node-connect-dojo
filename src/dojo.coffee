@@ -32,44 +32,45 @@ module.exports = (options = {}) ->
   args = []
   switch options.method
     when 'release'
-      dir = options.repository + '/dojo-release-' + options.version
+      tgz = "#{options.repository}/dojo-release-#{options.version}.tar.gz"
+      dir = "#{options.repository}/dojo-release-#{options.version}"
+      url = "http://download.dojotoolkit.org/release-#{options.version}/dojo-release-#{options.version}.tar.gz"
       mapping = 
-        dojo: dir + '/dojo'
-        dijit: dir + '/dijit'
-        dojox: dir + '/dojox'
-        util: dir + '/util'
+        dojo: "#{dir}/dojo"
+        dijit: "#{dir}/dijit"
+        dojox: "#{dir}/dojox"
+        util: "#{dir}/util"
       fs.exists dir, (exists) ->
         return finish() if exists
-        url = 'http://download.dojotoolkit.org/release-' + options.version + '/dojo-release-' + options.version + '.tar.gz'
-        tgz = options.repository + '/dojo-release-' + options.version + '.tar.gz'
-        cmd = 'curl ' + url + ' -o ' + tgz + ' && tar -xzf ' + tgz + ' -C ' + options.repository
+        cmd = "curl #{url} -o #{tgz} && tar -xzf #{tgz} -C #{options.repository}"
         exec cmd, (err, stdout, stderr) ->
-          finish(err)
+          return finish err if err
+          finish err
     when 'git'
       count = 0
       _finish = ->
         return if ++count isnt 4
         finish()
       submodules.forEach (submodule) ->
-        revision =  options[ submodule + '_revision' ] or 'HEAD'
-        dirname = 'git-' + submodule + '-' + revision
-        mapping[submodule] = options.repository + '/' + dirname
+        revision =  options["#{submodule}_revision"] or 'HEAD'
+        dirname = "git-#{submodule}-#{revision}"
+        mapping[submodule] = "#{options.repository}/#{dirname}"
         clone = (next) ->
-          fs.exists options.repository + '/' + dirname, (exists) ->
+          fs.exists '#{options.repository}/#{dirname}', (exists) ->
             # Unrequired checkout if the directory named after the revision exists
             return _finish() if exists and revision isnt 'HEAD'
             return next() if exists
-            url = 'https://github.com/dojo/' + submodule + '.git'
+            url = "https://github.com/dojo/#{submodule}.git"
             cmds = []
-            cmds.push 'cd ' + options.repository
-            cmds.push 'git clone ' + url + ' ' + dirname
+            cmds.push "cd #{options.repository}"
+            cmds.push "git clone #{url} #{dirname}"
             cmds = cmds.join ' && '
             exec cmds, (err, stdout, stderr) ->
-              next(err)
+              next err
         checkout = (next) ->
           cmds = []
-          cmds.push 'cd ' + options.repository + '/' + dirname
-          cmds.push 'git checkout ' + revision
+          cmds.push 'cd #{options.repository}/#{dirname}'
+          cmds.push "git checkout #{revision}"
           cmds = cmds.join ' && '
           exec cmds, (err, stdout, stderr) ->
             next(err)
@@ -79,7 +80,7 @@ module.exports = (options = {}) ->
             return finish err if err
             _finish()
     else
-      throw new Error 'Invalid method option "' + options.method + '" (expects "download")'
+      throw new Error "Invalid method option \"#{options.method}\")"
   finish = (err) ->
     throw err if err
     loading = false
@@ -88,24 +89,13 @@ module.exports = (options = {}) ->
   plugin = (req, res, next) ->
     return args.push arguments if loading
     app = /^\/(\w+)\/.*/.exec req.url
-    if app and submodules.indexOf( app[1] ) isnt -1
-      app = app[1];
+    if app and submodules.indexOf(app[1]) isnt -1
+      app = app[1]
       req.url = req.url.substr app.length + 1
-      ### prior express 1.7
-      # Less
-      connect.compiler({ src: mapping[app], enable: ['less'] })(req, res, (err) ->
-        console.log err if err
-        # Static
-        sttc = connect.static mapping[app]
-        sttc req, res, ->
-          req.url = '/' + app + req.url
-          next()
-      )
-      ###
       # Static
       sttc = connect.static mapping[app]
       sttc req, res, ->
-        req.url = '/' + app + req.url
+        req.url = "/#{app}#{req.url}"
         next()
     else
       next()
