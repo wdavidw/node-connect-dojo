@@ -1,5 +1,6 @@
-connect = require 'connect'
+serve_static = require 'serve-static'
 fs = require 'fs'
+path = require 'path'
 fs.exists ?= require('path').exists
 {exec} = require 'child_process'
 
@@ -28,18 +29,17 @@ module.exports = (options = {}) ->
   # Store HTTP request in case we need to download Dojo
   loading = true
   submodules = ['dojo', 'dijit', 'dojox', 'util']
-  mapping = {}
+  options.mapping ?= {}
   args = []
   switch options.method
     when 'release'
       tgz = "#{options.repository}/dojo-release-#{options.version}.tar.gz"
       dir = "#{options.repository}/dojo-release-#{options.version}"
       url = "http://download.dojotoolkit.org/release-#{options.version}/dojo-release-#{options.version}.tar.gz"
-      mapping = 
-        dojo: "#{dir}/dojo"
-        dijit: "#{dir}/dijit"
-        dojox: "#{dir}/dojox"
-        util: "#{dir}/util"
+      options.mapping.dojo ?= path.resolve dir, "dojo"
+      options.mapping.dijit ?= path.resolve dir, "dijit"
+      options.mapping.dojox ?= path.resolve dir, "dojox"
+      options.mapping.util ?= path.resolve dir, "util"
       fs.exists dir, (exists) ->
         return finish() if exists
         cmd = "curl #{url} -o #{tgz} && tar -xzf #{tgz} -C #{options.repository}"
@@ -53,23 +53,23 @@ module.exports = (options = {}) ->
         finish()
       submodules.forEach (submodule) ->
         revision =  options["#{submodule}_revision"] or 'HEAD'
-        dirname = "git-#{submodule}-#{revision}"
-        mapping[submodule] = "#{options.repository}/#{dirname}"
+        options.mapping[submodule] ?= "git-#{submodule}-#{revision}"
+        options.mapping[submodule] = path.resolve options.repository, options.mapping[submodule]
         clone = (next) ->
-          fs.exists '#{options.repository}/#{dirname}', (exists) ->
+          fs.exists "#{options.mapping[submodule]}", (exists) ->
             # Unrequired checkout if the directory named after the revision exists
             return _finish() if exists and revision isnt 'HEAD'
             return next() if exists
             url = "https://github.com/dojo/#{submodule}.git"
             cmds = []
-            cmds.push "cd #{options.repository}"
-            cmds.push "git clone #{url} #{dirname}"
+            # cmds.push "cd #{options.mapping[submodule]}"
+            cmds.push "git clone #{url} #{options.mapping[submodule]}"
             cmds = cmds.join ' && '
             exec cmds, (err, stdout, stderr) ->
               next err
         checkout = (next) ->
           cmds = []
-          cmds.push 'cd #{options.repository}/#{dirname}'
+          cmds.push "cd #{options.mapping[submodule]}"
           cmds.push "git checkout #{revision}"
           cmds = cmds.join ' && '
           exec cmds, (err, stdout, stderr) ->
@@ -93,7 +93,7 @@ module.exports = (options = {}) ->
       app = app[1]
       req.url = req.url.substr app.length + 1
       # Static
-      sttc = connect.static mapping[app]
+      sttc = serve_static options.mapping[app]
       sttc req, res, ->
         req.url = "/#{app}#{req.url}"
         next()
