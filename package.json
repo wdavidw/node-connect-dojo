@@ -1,6 +1,6 @@
 {
   "name": "connect-dojo",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Connect middleware exposing the Dojo Toolkit",
   "author": "David Worms <david@adaltas.com>",
   "contributors": [
