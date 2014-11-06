@@ -10,12 +10,12 @@ fs.exists ?= require('path').exists
 
 Connect middleware exposing the Dojo Toolkit.
 
-By default, Dojo releases are downloaded and extracted 
-inside the "/tmp" folder and are cached for later usages. 
-You may change this folder into a permanent location by 
+By default, Dojo releases are downloaded and extracted
+inside the "/tmp" folder and are cached for later usages.
+You may change this folder into a permanent location by
 providing the option "repository".
 
-Options include: 
+Options include:
 *   method        One of "release" or "git"
 *   version       Dojo version
 *   repository    Caching folder, default to "/tmp"
@@ -36,10 +36,9 @@ module.exports = (options = {}) ->
       tgz = "#{options.repository}/dojo-release-#{options.version}.tar.gz"
       dir = "#{options.repository}/dojo-release-#{options.version}"
       url = "http://download.dojotoolkit.org/release-#{options.version}/dojo-release-#{options.version}.tar.gz"
-      options.mapping.dojo ?= path.resolve dir, "dojo"
-      options.mapping.dijit ?= path.resolve dir, "dijit"
-      options.mapping.dojox ?= path.resolve dir, "dojox"
-      options.mapping.util ?= path.resolve dir, "util"
+      for submodule in submodules
+        options.mapping[submodule] ?= path.resolve dir, submodule
+        options.mapping[submodule] = path.resolve dir, options.mapping[submodule]
       fs.exists dir, (exists) ->
         return finish() if exists
         cmd = "curl #{url} -o #{tgz} && tar -xzf #{tgz} -C #{options.repository}"
